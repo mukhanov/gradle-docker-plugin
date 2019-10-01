@@ -1,0 +1,6 @@
+.idea/
+build/
+*.iws
+out/
+.gradle/
+

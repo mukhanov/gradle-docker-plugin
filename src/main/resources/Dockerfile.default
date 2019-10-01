@@ -1,0 +1,18 @@
+FROM mcr.microsoft.com/java/jre:11u3-zulu-alpine
+
+ENV JAVA_OPTS "-Xmx1G -Xms128M"
+ENV BASEDIR "/opt/app"
+ENV LOGS_DIR "/var/log/app"
+
+WORKDIR ${BASEDIR}
+
+ENTRYPOINT java ${JAVA_OPTS} \
+    -cp "dependencies/*:app/*" \
+    -Xlog:gc*=info:file=${LOGS_DIR}/@project.group@.@project.name@-gc.log:time,tid,tags \
+    -XX:+HeapDumpOnOutOfMemoryError \
+    -XX:HeapDumpPath=${LOGS_DIR} \
+    -Dbasedir=${BASEDIR} \
+    @mainClass@
+
+ADD dependencies ./dependencies
+ADD app ./app
